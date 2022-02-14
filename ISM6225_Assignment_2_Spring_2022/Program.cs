@@ -132,7 +132,13 @@ namespace ISM6225_Assignment_2_Spring_2022
         {
             try
             {
-                //Write your Code here.
+             List<int> result=new List<int>(); // creating a new list to store the values.
+                for(int i = 0; i < nums.Length; i++) // loop for searching within the string
+                {
+                    result.Insert(i, nums[i]);
+                }
+                return result.IndexOf(target); // returning the target value.
+                    
                 return -1;
             }
             catch (Exception)
@@ -163,10 +169,55 @@ namespace ISM6225_Assignment_2_Spring_2022
         {
             try
             {
-                
-                //write your code here.
+                {
+                  
+                    HashSet<string> hashban = new HashSet<string>();  //Adding all the banned word in Hashset //
+                    Dictionary<string, int> dict = new Dictionary<string, int>();
+                    string result = "";
+                    for (int i = 0; i < banned.Length; i++)
+                    {
+                        hashban.Add(banned[i]);
 
-                return "";
+                    }
+
+                    paragraph = paragraph //replacing all the characters//
+                    .Replace("!", " ")
+                    .Replace("?", " ")
+                    .Replace("'", " ")
+                    .Replace(",", " ")
+                    .Replace(".", " ")
+                    .Replace(";", " ")
+                    .ToLower();
+
+
+                    string[] words = paragraph.Split(" ");
+
+                    for (int i = 0; i < words.Length; i++)
+                    {
+                        if ((!(hashban.Contains(words[i]))) && (words[i] != "")) // contain method to the words string //
+                        {
+                            if (!(dict.ContainsKey(words[i])))
+                                dict.Add(words[i], 1);
+                            else
+                                dict[words[i]] += 1;
+                        }
+                    }
+
+                    int max = 0;
+                    foreach (var item in dict)
+                    {
+                        if (item.Value > max)
+                        {
+                            max = item.Value;
+                            result = item.Key;
+
+                        }
+                    }
+
+                    return result;
+                }
+
+                return "result";
             }
             catch (Exception)
             {
@@ -200,7 +251,13 @@ namespace ISM6225_Assignment_2_Spring_2022
         {
             try
             {
-                //write your code here.
+                var freq = new int[501]; 
+                foreach (var num in arr) // using foreach to take single element at a time //
+                    freq[num]++;
+
+                for (int i = 500; i >= 1; i--) // using for loop for reverse iteration from 500 to 1 //
+                    if (freq[i] == i)
+                        return i;
                 return 0;
             }
             catch (Exception)
@@ -235,7 +292,36 @@ namespace ISM6225_Assignment_2_Spring_2022
         {
             try
             {
-                //write your code here.
+                {
+                    int bulls = 0;
+                    int cows = 0;
+                    var dict = new Dictionary<char,int>();// defining dictionary 
+                    for (int i = 0; i < secret.Length; ++i)// llop to search the string//
+                    {
+                        if (guess[i] == secret[i]) // condition if guess array character equals secret array character//
+                        {
+                            bulls++;
+                        }
+                        else // used multiple if's for different conditions//
+                        {
+                            if (!dict.ContainsKey(secret[i]))
+                            {
+                                dict[secret[i]] = 0;
+                            }
+                            if (!dict.ContainsKey(guess[i]))
+                            {
+                                dict[guess[i]] = 0;
+                            }
+                            if (dict[secret[i]]++ < 0)
+                                cows++;
+                            if (dict[guess[i]]-- > 0)
+                                cows++;
+                        }
+                    }
+
+
+                    return bulls + "A" + cows + "B";
+                }
                 return "";
             }
             catch (Exception)
@@ -265,8 +351,35 @@ namespace ISM6225_Assignment_2_Spring_2022
         {
             try
             {
-                //write your code here.
-                
+                {
+                    var previous_index = new int[26]; // defining a new variable to store the previous occurence of sny character//
+                    var collection = new List<int>();
+                    int i = 0;
+                    
+                    for (i = 0; i < s.Length; i++) // loop used for searching the string for occurence //
+                        previous_index[s[i] - 'a'] = i;
+                    i = 0;
+
+                    while (i < s.Length) // conditions to to find any character and for every character found, theb I'll find it's last occurence from the array.//
+                    {
+                        int begin = i;
+                        int lastindex = previous_index[s[i] - 'a'];
+
+                        while (i < lastindex) // setting the current last index to be scanned if it is greater.//
+                        {
+                            lastindex = Math.Max(previous_index[s[i] - 'a'], lastindex);
+                            i++;
+                            
+                            if (lastindex == s.Length - 1)
+                            { i = lastindex; break; };
+                        }
+                        collection.Add(i - begin + 1);
+                        i++;
+                    }
+
+                    return collection;
+                }
+
                 return new List<int>() {} ;
             }
             catch (Exception)
@@ -310,9 +423,27 @@ namespace ISM6225_Assignment_2_Spring_2022
         {
             try
             {
-                //write your code here.
+                
+                    int row = 1;
+                    int sum = 0;
+                    int temp = 0;
 
-                return new List<int>() { };
+                    Char[] c = s.ToCharArray(); // conversion to a unicode array//
+                    foreach (Char _c in c)
+                    {
+                        temp = widths[_c - 97]; 
+                        if (sum + temp > 100)
+                        {
+                            row++;
+                            sum = temp;
+                        }
+                        else
+                        {
+                            sum += temp;
+                        }
+                    }
+                return new List<int>() {row,sum}; // returning new list//
+              
             }
             catch (Exception)
             {
@@ -349,9 +480,30 @@ namespace ISM6225_Assignment_2_Spring_2022
         {
             try
             {
-                //write your code here.
+                Dictionary<char, char> dc = new Dictionary<char, char>(); // dictionary definition//
+                dc.Add(')', '(');
+                dc.Add(']', '[');
+                dc.Add('}', '{');
 
-                return false;
+                int i = 0;
+                Stack<char> stack = new Stack<char>(); // used stack collection to check inputs of brackets//
+                while (i < bulls_string10.Length)
+                {
+                    if (dc.ContainsKey(bulls_string10[i])) // used contain method to check the occurence in bulls_string//
+                    {
+                        if (stack.Count == 0) return false;
+                        if (dc[bulls_string10[i]] != stack.Pop())
+                            return false;
+                    }
+                    else
+                        stack.Push(bulls_string10[i]);
+
+                    i++;
+                }
+                if (stack.Count == 0) 
+                    return true;
+                else
+                    return false;
             }
             catch (Exception)
             {
@@ -393,7 +545,30 @@ namespace ISM6225_Assignment_2_Spring_2022
             try
             {
                 //write your code here.
+                {
+                    Dictionary<string, int> count = new Dictionary<string, int>();
+                    string[] letter = { ".-", "-...", "-.-.", "-..", ".", "..-.", "--.", "....", "..", ".---", "-.-", ".-..", "--", "-.", "---", ".--.", "--.-", ".-.", "...", "-", "..-", "...-", ".--", "-..-", "-.--", "--.." };
+                    for (int i = 0; i < words.Length; i++)
+                    {
+                        string word = string.Empty; // Empty will be used to check whether the word string is an empty string.//
+                        for (int j = 0; j < words[i].Length; j++)
+                        {
+                            int indexer = words[i][j] - 'a';
+                            word += letter[indexer];
+                        }
+                        if (count.ContainsKey(word)) // ContainsKey method will help us to check whether the word exists in the input or not//
+                        {
+                            count[word]++;
+                        }
+                        else
+                        {
+                            count[word] = 1;
+                        }
 
+                    }
+                    return count.Count;
+
+                }
                 return 0;
             }
             catch (Exception)
@@ -425,8 +600,9 @@ namespace ISM6225_Assignment_2_Spring_2022
         {
             try
             {
-                //write your code here.
-                return 0;
+                // write your code here
+                    return 0;
+                
             }
             catch (Exception)
             {
@@ -460,7 +636,33 @@ namespace ISM6225_Assignment_2_Spring_2022
         {
             try
             {
-                //write your code here.
+                {
+                    int x = word1.Length; // two variables to store word length//
+                    int y = word2.Length;
+                    int[,] cost = new int[x + 1, y + 1];
+                    for (int i = 0; i <= x; i++)
+                        cost[i, 0] = i;
+
+                    for (int j = 0; j <= y; j++)
+                        cost[0, j] = j;
+
+                    for (int i = 0; i < x; i++)
+                    {
+                        for (int j = 0; j < y; j++) //inner loop//
+                        {
+                            if (word1[i] == word2[j])
+                                cost[i + 1, j + 1] = cost[i, j];
+                            else
+                            {
+                                int a = cost[i, j];
+                                int b = cost[i + 1, j];
+                                int c = cost[i, j + 1];
+                                cost[i + 1, j + 1] = Math.Min(a, Math.Min(b, c)) + 1;
+                            }
+                        }
+                    }
+                    return cost[x, y];
+                }
                 return 0;
 
             }
